@@ -24,6 +24,7 @@ namespace TestsGenerator.Infrastructure
             });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ITestsTemplatesService, TestsTemplatesService>();
             services.AddSingleton<IPdfService, PdfService>();
 
             return services;

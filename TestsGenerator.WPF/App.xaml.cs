@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
+using TestsGenerator.App;
 using TestsGenerator.Infrastructure;
 using TestsGenerator.WPF.Services;
 using TestsGenerator.WPF.ViewModels.Pages;
