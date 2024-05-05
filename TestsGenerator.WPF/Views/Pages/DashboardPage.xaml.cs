@@ -10,14 +10,15 @@ namespace TestsGenerator.WPF.Views.Pages
     public partial class DashboardPage : INavigableView<DashboardViewModel>
     {
         public DashboardViewModel ViewModel { get; }
-        private ObservableCollection<Answers> dataCollection = new ObservableCollection<Answers>();
+        private ObservableCollection<Answers> AnswersCollection = new ObservableCollection<Answers>();
+        
 
 
         public DashboardPage(DashboardViewModel viewModel)
         {
             ViewModel = viewModel;
             InitializeComponent();
-            Answers_Grid.ItemsSource = dataCollection;
+            Answers_Grid.ItemsSource = AnswersCollection;
             Change_Width();
         }
 
@@ -29,7 +30,7 @@ namespace TestsGenerator.WPF.Views.Pages
         }
         private void Add_Answer(object sender, RoutedEventArgs e)
         {
-            dataCollection.Add(new Answers());
+            AnswersCollection.Add(new Answers());
             Answers_Grid.Columns[0].Width = new DataGridLength(730);
         }
 
@@ -38,8 +39,12 @@ namespace TestsGenerator.WPF.Views.Pages
             if (Answers_Grid.SelectedItem != null)
             {
                 Answers selectedData = (Answers)Answers_Grid.SelectedItem;
-                dataCollection.Remove(selectedData);
+                AnswersCollection.Remove(selectedData);
             }
+        }
+
+        private void Add_Category(object sender, RoutedEventArgs e)
+        {
         }
     }
 
@@ -47,7 +52,6 @@ namespace TestsGenerator.WPF.Views.Pages
     {
         public string Odpowiedź { get; set; }
         public bool Prawidłowa { get; set; }
-        
         
     }
 }

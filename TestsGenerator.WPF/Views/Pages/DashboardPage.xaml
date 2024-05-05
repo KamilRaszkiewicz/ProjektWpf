@@ -27,5 +27,7 @@
 
         <ui:Button Content="Skasuj Odpowiedź" Margin="500,110,0,0" VerticalAlignment="Top" Click="Delete_Answer"/>
         <ui:Button Content="Dodaj Odpowiedź" Margin="365,110,0,0" VerticalAlignment="Top" Click="Add_Answer"/>
+        <ui:DropDownButton Content="Kategoria" Margin="536,20,0,0" VerticalAlignment="Top" x:Name="Categories"/>
+        <ui:Button Content="+" Margin="642,19,0,0" VerticalAlignment="Top" Width="36" Click="Add_Category"/>
     </Grid>
 </Page>
