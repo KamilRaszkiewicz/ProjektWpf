@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TestsGenerator.App.Interfaces;
@@ -25,6 +24,7 @@ namespace TestsGenerator.Infrastructure.Services
         {
             return _dbset.AsQueryable();
         }
+
 
         public async Task DeleteAsync(T entity, CancellationToken ct)
         {

@@ -17,20 +17,17 @@
     mc:Ignorable="d">
 
     <Grid VerticalAlignment="Top">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-
+        <ui:TextBox HorizontalAlignment="Left" Margin="90,22,0,0" TextWrapping="Wrap" Text="Treść pytania" VerticalAlignment="Top" Width="632" />
         <ui:Button
-            Grid.Column="0"
-            Command="{Binding ViewModel.CounterIncrementCommand, Mode=OneWay}"
-            Content="Click me!"
-            Icon="Fluent24" />
-        <TextBlock
-            Grid.Column="1"
-            Margin="12,0,0,0"
-            VerticalAlignment="Center"
-            Text="{Binding ViewModel.Counter, Mode=OneWay}" />
+            Content="Dodaj"
+            Icon="Fluent24" Margin="595,361,0,0" VerticalAlignment="Top" Width="127" />
+        <ui:DataGrid Margin="42,109,30,89" x:Name="Answers_Grid">
+
+        </ui:DataGrid>
+
+        <ui:Button Content="Skasuj Odpowiedź" Margin="500,110,0,0" VerticalAlignment="Top" Click="Delete_Answer"/>
+        <ui:Button Content="Dodaj Odpowiedź" Margin="365,110,0,0" VerticalAlignment="Top" Click="Add_Answer"/>
+        <ui:DropDownButton Content="Kategoria" Margin="536,20,0,0" VerticalAlignment="Top" x:Name="Categories"/>
+        <ui:Button Content="+" Margin="642,19,0,0" VerticalAlignment="Top" Width="36" Click="Add_Category"/>
     </Grid>
 </Page>
