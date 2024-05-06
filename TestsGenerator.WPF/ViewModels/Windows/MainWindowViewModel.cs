@@ -13,19 +13,19 @@ namespace TestsGenerator.WPF.ViewModels.Windows
         {
             new NavigationViewItem()
             {
-                Content = "Dodaj Pytanie",
+                Content = "Pytania",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 TargetPageType = typeof(Views.Pages.DashboardPage)
             },
             new NavigationViewItem()
             {
-                Content = "Data",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.DataHistogram24 },
+                Content = "Testy",
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Save24 },
                 TargetPageType = typeof(Views.Pages.DataPage)
             },
             new NavigationViewItem()
             {
-                Content = "Pdf",
+                Content = "Arkusze",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.DocumentPdf24 },
                 TargetPageType = typeof(Views.Pages.PdfPage)
             }
