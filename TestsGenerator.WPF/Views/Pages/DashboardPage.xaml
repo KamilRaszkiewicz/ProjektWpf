@@ -17,17 +17,22 @@
     mc:Ignorable="d">
 
     <Grid VerticalAlignment="Top">
-        <ui:TextBox HorizontalAlignment="Left" Margin="90,22,0,0" TextWrapping="Wrap" Text="Treść pytania" VerticalAlignment="Top" Width="632" />
+        <ui:TextBox HorizontalAlignment="Left" Margin="90,10,0,0" TextWrapping="Wrap" Text="Treść pytania" VerticalAlignment="Top" Width="632" />
         <ui:Button
             Content="Dodaj"
             Icon="Fluent24" Margin="595,361,0,0" VerticalAlignment="Top" Width="127" />
         <ui:DataGrid Margin="42,109,30,89" x:Name="Answers_Grid">
-
         </ui:DataGrid>
 
+        
+        
         <ui:Button Content="Skasuj Odpowiedź" Margin="500,110,0,0" VerticalAlignment="Top" Click="Delete_Answer"/>
         <ui:Button Content="Dodaj Odpowiedź" Margin="365,110,0,0" VerticalAlignment="Top" Click="Add_Answer"/>
-        <ui:DropDownButton Content="Kategoria" Margin="536,20,0,0" VerticalAlignment="Top" x:Name="Categories"/>
-        <ui:Button Content="+" Margin="642,19,0,0" VerticalAlignment="Top" Width="36" Click="Add_Category"/>
+        <ui:DropDownButton Content="Kategoria" Margin="536,12,0,0" VerticalAlignment="Top" x:Name="Categories"/>
+        <ui:Button Content="+" Margin="642,12,0,0" VerticalAlignment="Top" Width="36" Click="Add_Category" RenderTransformOrigin="0.45,0.183"/>
+        <ui:AutoSuggestBox Margin="42,56,30,0" VerticalAlignment="Top"/>
+        <ui:Button
+            Content="Wyczyść"
+            Icon="Fluent24" Margin="442,361,0,0" VerticalAlignment="Top" Width="127" IsEnabled="False" />
     </Grid>
 </Page>
