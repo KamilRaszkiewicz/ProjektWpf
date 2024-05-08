@@ -19,9 +19,15 @@ namespace TestsGenerator.WPF.ViewModels.Windows
             },
             new NavigationViewItem()
             {
-                Content = "Testy",
+                Content = "Szablony",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Save24 },
                 TargetPageType = typeof(Views.Pages.DataPage)
+            },
+            new NavigationViewItem()
+            {
+                Content = "Testy",
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Fingerprint24 },
+                TargetPageType = typeof(Views.Pages.ExamsPage)
             },
             new NavigationViewItem()
             {
