@@ -13,11 +13,72 @@ namespace TestsGenerator.Infrastructure.Database
         public DbSet<Test> Tests { get; set; }
         public DbSet<TestTemplate> TestTemplates { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
         public TestsDbContext(DbContextOptions<TestsDbContext> options) : base(options)
         {
             Database.EnsureCreated();
+
+            var category1 = new Category
+            {
+                Name = "Okoń"
+            };
+
+            var category2 = new Category
+            {
+                Name = "Lubie placki"
+            };
+
+            Categories.AddRange(category1, category2);
+
+            Database.EnsureCreated();
+
+            var answer1 = new Answer
+            {
+                Content = "Odpowiedź1"
+            };
+
+            var answer2 = new Answer
+            {
+                Content = "Odpowiedź2"
+            };
+
+            var answer3 = new Answer
+            {
+                Content = "Odpowiedź3"
+            };
+
+
+            Questions.Add(
+                new Question
+                {
+                    QuestionContent = $"Pytanie {Random.Shared.Next()} ",
+
+                    Category = category1,
+
+                    QuestionAnswers = new List<QuestionAnswer>
+                    {
+                        new QuestionAnswer
+                        {
+                            IsCorrect = true,
+                            Answer = answer1
+                        },
+                        new QuestionAnswer
+                        {
+                            IsCorrect = Random.Shared.Next() % 2 == 0,
+                            Answer = answer2
+                        },
+                        new QuestionAnswer
+                        {
+                            IsCorrect = Random.Shared.Next() % 2 == 0,
+                            Answer = answer3
+                        },
+                    }
+                }
+            );
+
+            SaveChanges();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,7 +100,7 @@ namespace TestsGenerator.Infrastructure.Database
 
             modelBuilder
                 .Entity<Question>()
-                .HasMany(x => x.Categories)
+                .HasOne(x => x.Category)
                 .WithMany(x => x.Questions);
 
             modelBuilder
@@ -86,7 +147,6 @@ namespace TestsGenerator.Infrastructure.Database
             modelBuilder
                 .Entity<TestQuestionAnswerOrdinal>()
                 .HasKey(x => new { x.TestsId, x.QuestionsId, x.AnswersId });
-
 
             base.OnModelCreating(modelBuilder);
         }

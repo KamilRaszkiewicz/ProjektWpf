@@ -11,9 +11,9 @@ namespace TestsGenerator.Domain.Models.Questions
         public long QuestionsId { get; set; }
         public long AnswersId { get; set; }
 
-        public bool IsCorrect { get; set; }
+        public bool IsCorrect { get; set; } = false;
 
-        public List<Question> Questions { get; set; }
-        public List<Answer> Answers { get; set; }
+        public Question Question { get; set; }
+        public Answer Answer { get; set; }
     }
 }
