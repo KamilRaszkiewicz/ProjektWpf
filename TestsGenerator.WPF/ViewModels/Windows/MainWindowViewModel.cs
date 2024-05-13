@@ -14,8 +14,8 @@ namespace TestsGenerator.WPF.ViewModels.Windows
             new NavigationViewItem()
             {
                 Content = "Dodaj Pytanie",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
-                TargetPageType = typeof(Views.Pages.DashboardPage)
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Question24 },
+                TargetPageType = typeof(Views.Pages.QuestionsPage)
             },
             new NavigationViewItem()
             {

@@ -16,9 +16,9 @@ namespace TestsGenerator.Domain.Models.Questions
 
         public bool IsSingleChoice { get; set; }
 
-        public List<Category> Categories { get; set; }
+        public Category Category { get; set; }
 
-        public List<Answer> Answers { get; set; }   //just to display
-        public List<QuestionAnswer> QuestionAnswers { get; set; }   //to check wether answer is correct
+        public IList<Answer> Answers { get; set; }   //just to display  //IList coby ObservableCollection pasowalo
+        public IList<QuestionAnswer> QuestionAnswers { get; set; }   //to check wether answer is correct //IList coby ObservableCollection pasowalo
     }
 }

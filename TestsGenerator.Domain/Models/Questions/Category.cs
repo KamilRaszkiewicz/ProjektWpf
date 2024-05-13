@@ -9,7 +9,7 @@ namespace TestsGenerator.Domain.Models.Questions
     public class Category
     {
         public long Id { get; set; }
-        public bool Name { get; set; }
+        public string Name { get; set; }
 
         public List<Question> Questions { get; set; }
     }
