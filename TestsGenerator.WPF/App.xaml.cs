@@ -68,8 +68,13 @@ namespace TestsGenerator.WPF
                 services.AddSingleton<DashboardPage>();
                 services.AddSingleton<DashboardViewModel>();
 
+
+                services.AddSingleton<ExamsViewModel>();
+                services.AddSingleton<ExamsPage>();
+
                 services.AddSingleton<QuestionsPage>();
                 services.AddSingleton<QuestionsViewModel>();
+
 
                 services.AddSingleton<DataPage>();
                 services.AddSingleton<DataViewModel>();
