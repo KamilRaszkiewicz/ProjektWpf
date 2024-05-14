@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TestsGenerator.Infrastructure.Database;
 using TestsGenerator.WPF.Views.Pages;
 using TestsGenerator.WPF.Views.Windows;
 using Wpf.Ui;
@@ -43,6 +44,8 @@ namespace TestsGenerator.WPF.Services
         /// </summary>
         private async Task HandleActivationAsync()
         {
+            _serviceProvider.GetRequiredService<TestsDbContext>(); //warmup
+
             if (!Application.Current.Windows.OfType<MainWindow>().Any())
             {
                 _navigationWindow = (
@@ -50,7 +53,7 @@ namespace TestsGenerator.WPF.Services
                 )!;
                 _navigationWindow!.ShowWindow();
 
-                _navigationWindow.Navigate(typeof(Views.Pages.DashboardPage));
+                //_navigationWindow.Navigate(typeof(Views.Pages.QuestionsPage));
             }
 
             await Task.CompletedTask;

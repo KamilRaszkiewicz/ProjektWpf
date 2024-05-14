@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
+using TestsGenerator.App;
 using TestsGenerator.Infrastructure;
 using TestsGenerator.WPF.Services;
 using TestsGenerator.WPF.ViewModels.Pages;
@@ -67,8 +68,13 @@ namespace TestsGenerator.WPF
                 services.AddSingleton<DashboardPage>();
                 services.AddSingleton<DashboardViewModel>();
 
+
                 services.AddSingleton<ExamsViewModel>();
                 services.AddSingleton<ExamsPage>();
+
+                services.AddSingleton<QuestionsPage>();
+                services.AddSingleton<QuestionsViewModel>();
+
 
                 services.AddSingleton<DataPage>();
                 services.AddSingleton<DataViewModel>();
@@ -80,6 +86,7 @@ namespace TestsGenerator.WPF
                 services.AddSingleton<PdfViewModel>();
 
                 services.AddInfrastructure();
+                services.AddApp();
             }).Build();
 
         /// <summary>
