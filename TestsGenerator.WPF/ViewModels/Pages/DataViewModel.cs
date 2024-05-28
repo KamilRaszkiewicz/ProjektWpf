@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Buffers.Text;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
 using TestsGenerator.App;
 using TestsGenerator.App.Interfaces;
+using TestsGenerator.App.Services;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.Domain.Models.Tests;
 using TestsGenerator.WPF.Models;
@@ -13,16 +15,18 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 {
     public partial class DataViewModel : ObservableObject, INavigationAware
     {
-
+        [ObservableProperty]
+        private ObservableCollection<Question> _questions;
 
         [ObservableProperty]
-        private IEnumerable<DataColor> _colors;
+        private ObservableCollection<Category> _categories;
+        private readonly QuestionsService _questionsService;
 
         private bool _isInitialized = false;
 
-        public DataViewModel()
+        public DataViewModel(QuestionsService questionsService)
         {
-
+            _questionsService = questionsService;
         }
 
 
@@ -32,31 +36,23 @@ namespace TestsGenerator.WPF.ViewModels.Pages
                 InitializeViewModel();
         }
 
+
         public void OnNavigatedFrom() { }
 
-        private void InitializeViewModel()
+        public void InitializeViewModel()
         {
-            var random = new Random();
-            var colorCollection = new List<DataColor>();
+            Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
 
-            for (int i = 0; i < 8192; i++)
-                colorCollection.Add(
-                    new DataColor
-                    {
-                        Color = new SolidColorBrush(
-                            Color.FromArgb(
-                                (byte)200,
-                                (byte)random.Next(0, 250),
-                                (byte)random.Next(0, 250),
-                                (byte)random.Next(0, 250)
-                            )
-                        )
-                    }
-                );
+            Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
+        }
+        private ObservableCollection<Question> QuestionsListToObservableColleciton(List<Question> questions)
+        {
+            return new ObservableCollection<Question>(questions.Select(x =>
+            {
+                x.QuestionAnswers = new ObservableCollection<QuestionAnswer>(x.QuestionAnswers);
 
-            Colors = colorCollection;
-
-            _isInitialized = true;
+                return x;
+            }).ToList());
         }
     }
 }

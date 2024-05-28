@@ -30,6 +30,11 @@ namespace TestsGenerator.Infrastructure.Database
                 Name = "Lubie placki"
             };
 
+            var template1 = new TestTemplate
+            {
+                Name = "HightHigger",
+            };
+
             Categories.AddRange(category1, category2);
 
             Database.EnsureCreated();

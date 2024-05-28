@@ -27,6 +27,8 @@ namespace TestsGenerator.WPF.Views.Pages
                 listView.Items.Add("Szablon " + i.ToString());
             }
         }
+
+
         private void Add_template(object sender, RoutedEventArgs e)
         {
             listView.Items.Add("Nowy szablon");

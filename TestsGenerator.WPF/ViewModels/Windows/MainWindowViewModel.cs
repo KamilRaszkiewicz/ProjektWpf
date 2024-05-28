@@ -15,7 +15,7 @@ namespace TestsGenerator.WPF.ViewModels.Windows
             {
                 Content = "Pytania",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
-                TargetPageType = typeof(Views.Pages.DashboardPage)
+                TargetPageType = typeof(Views.Pages.QuestionsPage)
 
             },
             new NavigationViewItem()

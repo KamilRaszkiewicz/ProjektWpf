@@ -10,7 +10,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="DataPage"
     d:DataContext="{d:DesignInstance local:DataPage,
-                                     IsDesignTimeCreatable=False}"
+    IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -20,16 +20,42 @@
     mc:Ignorable="d">
 
     <Grid>
-        <ui:DynamicScrollViewer Margin="0,0,601,0" x:Name="Scroll" >
-            <ui:ListView x:Name="listView"  />
-        </ui:DynamicScrollViewer>
+        <ui:ListView x:Name="listView" Margin="0,0,672,264"/>
         <ui:Button Margin="238,10,0,0" VerticalAlignment="Top" Content="+" Click="Add_template"/>
         <ui:TextBox HorizontalAlignment="Left" Margin="350,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="121" PlaceholderText="nazwa szablonu" x:Name="template_name" />
         <ui:Button Margin="350,51,0,0" VerticalAlignment="Top" Content="nowa nazwa" Click="Change_Template_Name" />
         <Slider x:Name="slider" Minimum="0" Maximum="100" Value="{Binding ElementName=valueTextBox, Path=Text, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" HorizontalAlignment="Left" Margin="485,60,0,0" VerticalAlignment="Top" Width="305"/>
         <ui:TextBlock HorizontalAlignment="Left" Margin="485,10,0,0" TextWrapping="Wrap" Text="Liczba arkuszy do wygenerowania" VerticalAlignment="Top" Height="45" Width="315" FontSize="20"/>
         <ui:TextBlock HorizontalAlignment="Left" Margin="618,86,0,0" TextWrapping="Wrap" x:Name="valueTextBox" Text="{Binding ElementName=slider, Path=Value, StringFormat={}{0}}" VerticalAlignment="Top"/>
-
-
+        <ComboBox
+            ItemsSource="{Binding ViewModel.Categories}"
+            x:Name="Categories" Margin="350,124,205,0" VerticalAlignment="Top">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ui:DataGrid
+                Height="190"
+                CanUserResizeColumns="False"
+                CanUserResizeRows="False"
+                Width="{Binding ActualWidth, ElementName=QuestionsContentGrid, Mode=OneWay}"
+                ItemsSource="{Binding ViewModel.Questions, Mode=OneWay}"
+                AutoGenerateColumns="False"
+                x:Name="Answers_Grid" Margin="0,245,0,5">
+            <DataGrid.Columns>
+                <DataGridTextColumn 
+                        Header="Odpowiedz"
+                        Width="*"
+                        Binding="{Binding QuestionContent, Mode=OneWay}"
+                        ></DataGridTextColumn>
+                <DataGridCheckBoxColumn
+                        Header="W Tescie" 
+                        Width="auto">
+                </DataGridCheckBoxColumn>
+            </DataGrid.Columns>
+        </ui:DataGrid>
+        <ui:Button Margin="690,184,0,0" VerticalAlignment="Top" Content="Generuj" Click="Change_Template_Name" />
     </Grid>
 </Page>
