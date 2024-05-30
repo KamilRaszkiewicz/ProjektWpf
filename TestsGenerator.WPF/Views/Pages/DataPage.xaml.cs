@@ -19,30 +19,31 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             ViewModel = viewModel;
             _pdfService = pdfService;
-            DataContext = this;
-
             InitializeComponent();
-            for (int i = 1; i <= 10; i++)
-            {
-                listView.Items.Add("Szablon " + i.ToString());
-            }
+            DataContext = this;
         }
 
+        private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = Categories_ComboBox.SelectedItem as Category;
 
+            if (item == null)
+            {
+                return;
+            }
+            else
+            {
+                ViewModel.Questions = ViewModel.GetQuestionsWithGivenCategory(item);
+            }
+
+        }
         private void Add_template(object sender, RoutedEventArgs e)
         {
-            listView.Items.Add("Nowy szablon");
+       
         }
 
         private void Change_Template_Name(object sender, RoutedEventArgs e)
         {
-            if (listView.SelectedItem != null)
-            {
-                Debug.Print(listView.SelectedItem.ToString() + " " + template_name.Text);
-                listView.SelectedItem = template_name.Text;
-                listView.Items.Refresh();
-
-            }
 
         }
     }

@@ -15,14 +15,17 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 {
     public partial class DataViewModel : ObservableObject, INavigationAware
     {
+        private readonly QuestionsService _questionsService;
+        private bool _isInitialized = false;
+
         [ObservableProperty]
         private ObservableCollection<Question> _questions;
 
         [ObservableProperty]
         private ObservableCollection<Category> _categories;
-        private readonly QuestionsService _questionsService;
 
-        private bool _isInitialized = false;
+        [ObservableProperty]
+        private Question _selectedCategory;
 
         public DataViewModel(QuestionsService questionsService)
         {
@@ -37,8 +40,14 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         }
 
 
+
         public void OnNavigatedFrom() { }
 
+
+        public ObservableCollection<Question> GetQuestionsWithGivenCategory(Category category)
+        {
+            return new ObservableCollection<Question>(_questionsService.GetQuestionsWithGivenCategory(category));
+        }
         public void InitializeViewModel()
         {
             Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());

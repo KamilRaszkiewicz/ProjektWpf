@@ -29,8 +29,6 @@ namespace TestsGenerator.WPF.Views.Pages
         public QuestionsPage(QuestionsViewModel viewModel)
         {
             ViewModel = viewModel;
-
-
             InitializeComponent();
             DataContext = this;
         }
