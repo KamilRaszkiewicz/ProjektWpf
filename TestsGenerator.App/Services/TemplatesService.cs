@@ -10,30 +10,34 @@ using TestsGenerator.Domain.Models.Tests;
 
 namespace TestsGenerator.App.Services
 {
-     class TemplatesService
-     {
+    public class TemplatesService
+    {
         private readonly IRepository<TestTemplate> _templatesRepository;
         private readonly IRepository<Test> _testsRepository;
 
 
         public TemplatesService(
-            IRepository<TestTemplate> templatesRepository,
-            IRepository<Test> testsRepository)
+        IRepository<TestTemplate> templatesRepository,
+        IRepository<Test> testsRepository)
         {
             _templatesRepository = templatesRepository;
             _testsRepository = testsRepository;
         }
 
-        public List<TestTemplate> GetAllQuestions()
+        public List<TestTemplate> GetAllTemplates()
         {
             return _templatesRepository
                 .GetQueryable()
+                .Include(x => x.QuestionPool)
+                .Include(x => x.Tests)
                 .ToList();
         }
 
+
+
         public async Task SaveTemplate(TestTemplate template)
         {
-            if (template.Id == default)  //nowe pytanie
+            if (template.Id == default)  //nowy szablon
             {
                 await _templatesRepository.InsertAsync(template, CancellationToken.None);
             }
@@ -42,7 +46,5 @@ namespace TestsGenerator.App.Services
                 await _templatesRepository.UpdateAsync(template, CancellationToken.None);
             }
         }
-
-
     }
 }

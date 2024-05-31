@@ -20,8 +20,18 @@
     mc:Ignorable="d">
 
     <Grid>
-        <ui:ListView x:Name="listView" Margin="0,0,672,264"/>
-        <ui:Button Margin="238,10,0,0" VerticalAlignment="Top" Content="+" Click="Add_template"/>
+        <ui:ListView
+            x:Name="TemplateList"
+            ItemsSource="{Binding ViewModel.Templates}"
+            SelectionChanged="Template_SelectionChanged"
+            Margin="0,0,672,264">
+            <ui:ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ui:ListView.ItemTemplate>
+        </ui:ListView>
+        <ui:Button Margin="238,10,0,0" VerticalAlignment="Top" Content="+" Click="  "/>
         <ui:TextBox HorizontalAlignment="Left" Margin="350,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="121" PlaceholderText="nazwa szablonu" x:Name="template_name" />
         <ui:Button Margin="350,51,0,0" VerticalAlignment="Top" Content="nowa nazwa" Click="Change_Template_Name" />
         <Slider x:Name="slider" Minimum="0" Maximum="100" Value="{Binding ElementName=valueTextBox, Path=Text, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" HorizontalAlignment="Left" Margin="485,60,0,0" VerticalAlignment="Top" Width="305"/>

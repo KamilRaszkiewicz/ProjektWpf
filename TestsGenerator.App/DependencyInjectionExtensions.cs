@@ -13,6 +13,7 @@ namespace TestsGenerator.App
         public static IServiceCollection AddApp(this IServiceCollection services)
         {
             services.AddSingleton<QuestionsService>();
+            services.AddSingleton<TemplatesService>();
 
             return services;
         }

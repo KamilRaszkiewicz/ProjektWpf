@@ -39,13 +39,16 @@ namespace TestsGenerator.WPF.Views.Pages
         }
         private void Add_template(object sender, RoutedEventArgs e)
         {
-       
+            ViewModel.AddTemplateCommand.Execute(this);
+
         }
 
         private void Change_Template_Name(object sender, RoutedEventArgs e)
         {
 
         }
+
+
     }
 
 }

@@ -16,6 +16,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
     public partial class DataViewModel : ObservableObject, INavigationAware
     {
         private readonly QuestionsService _questionsService;
+        private readonly TemplatesService _templatesService;
         private bool _isInitialized = false;
 
         [ObservableProperty]
@@ -25,11 +26,18 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private ObservableCollection<Category> _categories;
 
         [ObservableProperty]
+        private ObservableCollection<TestTemplate> _templates;
+
+        [ObservableProperty]
         private Question _selectedCategory;
 
-        public DataViewModel(QuestionsService questionsService)
+        [ObservableProperty]
+        private Question _selectedTemplate;
+
+        public DataViewModel(QuestionsService questionsService, TemplatesService templatesService )
         {
             _questionsService = questionsService;
+            _templatesService = templatesService;
         }
 
 
@@ -38,7 +46,6 @@ namespace TestsGenerator.WPF.ViewModels.Pages
             if (!_isInitialized)
                 InitializeViewModel();
         }
-
 
 
         public void OnNavigatedFrom() { }
@@ -50,6 +57,8 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         }
         public void InitializeViewModel()
         {
+            Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
+
             Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
 
             Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
@@ -62,6 +71,31 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
                 return x;
             }).ToList());
+        }
+
+
+        [RelayCommand]
+        private void SaveTemplate()
+        {
+          /*  _templatesService.SaveTemplate(_selectedTemplate).ContinueWith(x =>
+            {
+                Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
+            });
+          */
+        }
+
+
+        [RelayCommand]
+        private async Task AddTemplate()
+        {
+            var temp = new TestTemplate
+            {
+                Name = "Nowy Szablon",
+                Tests = new List<Test>()
+            };
+            Templates.Add(temp);
+
+            
         }
     }
 }
