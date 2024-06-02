@@ -42,14 +42,30 @@ namespace TestsGenerator.WPF.Views.Pages
             ViewModel.AddTemplateCommand.Execute(this);
 
         }
-
-        private void Change_Template_Name(object sender, RoutedEventArgs e)
+        private void Template_SelectionChanged(object sender, RoutedEventArgs e)
         {
+            var listView = sender as System.Windows.Controls.ListView;
+            var template = (TestTemplate)listView.SelectedItem;
+            ViewModel.SelectedTemplate = template;
+            foreach(var question in ViewModel.Questions)
+            {
+                foreach (var q in template.QuestionPool)
+                {
+                    if (question.questionName == q.QuestionContent)
+                    {      
+                        question.isInPool = true; break;
+                    }
+                    else
+                    {
+                        question.isInPool = false;
+                    }
+                }
+            }
 
         }
 
 
-    }
 
+    }
 }
 

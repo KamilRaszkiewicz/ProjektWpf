@@ -31,9 +31,15 @@
                 </DataTemplate>
             </ui:ListView.ItemTemplate>
         </ui:ListView>
-        <ui:Button Margin="238,10,0,0" VerticalAlignment="Top" Content="+" Click="  "/>
-        <ui:TextBox HorizontalAlignment="Left" Margin="350,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="121" PlaceholderText="nazwa szablonu" x:Name="template_name" />
-        <ui:Button Margin="350,51,0,0" VerticalAlignment="Top" Content="nowa nazwa" Click="Change_Template_Name" />
+        <ui:Button Margin="238,10,0,0" VerticalAlignment="Top" Content="+"/>
+        <ui:TextBox 
+            HorizontalAlignment="Left" 
+            Margin="350,10,0,0" 
+            TextWrapping="Wrap"  
+            VerticalAlignment="Top" Width="121" PlaceholderText="nazwa szablonu" x:Name="template_name"
+            Text="{Binding ViewModel.SelectedTemplate.Name, Mode=TwoWay}"/>
+        <ui:Button Margin="350,61,0,0" VerticalAlignment="Top" Content="Zapisz"
+         Command="{Binding ViewModel.SaveTemplateCommand}"/>
         <Slider x:Name="slider" Minimum="0" Maximum="100" Value="{Binding ElementName=valueTextBox, Path=Text, Mode=TwoWay}" IsSnapToTickEnabled="True" TickFrequency="1" HorizontalAlignment="Left" Margin="485,60,0,0" VerticalAlignment="Top" Width="305"/>
         <ui:TextBlock HorizontalAlignment="Left" Margin="485,10,0,0" TextWrapping="Wrap" Text="Liczba arkuszy do wygenerowania" VerticalAlignment="Top" Height="45" Width="315" FontSize="20"/>
         <ui:TextBlock HorizontalAlignment="Left" Margin="618,86,0,0" TextWrapping="Wrap" x:Name="valueTextBox" Text="{Binding ElementName=slider, Path=Value, StringFormat={}{0}}" VerticalAlignment="Top"/>
@@ -59,14 +65,15 @@
                 <DataGridTextColumn 
                         Header="Odpowiedz"
                         Width="*"
-                        Binding="{Binding QuestionContent, Mode=OneWay}"
+                        Binding="{Binding questionName, Mode=OneWay}"
                         ></DataGridTextColumn>
                 <DataGridCheckBoxColumn
+                        Binding="{Binding isInPool, Mode=TwoWay}"
                         Header="W Tescie" 
                         Width="auto">
                 </DataGridCheckBoxColumn>
             </DataGrid.Columns>
         </ui:DataGrid>
-        <ui:Button Margin="690,184,0,0" VerticalAlignment="Top" Content="Generuj" Click="Change_Template_Name" />
+        <ui:Button Margin="690,184,0,0" VerticalAlignment="Top" Content="Generuj"/>
     </Grid>
 </Page>

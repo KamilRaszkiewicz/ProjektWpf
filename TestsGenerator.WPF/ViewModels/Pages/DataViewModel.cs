@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Buffers.Text;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Media;
 using TestsGenerator.App;
 using TestsGenerator.App.Interfaces;
@@ -20,7 +22,10 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private bool _isInitialized = false;
 
         [ObservableProperty]
-        private ObservableCollection<Question> _questions;
+        private ObservableCollection<TemplatesWithQuestions> _questions;
+
+        [ObservableProperty]
+        private ObservableCollection<Question> _questionsNotChanged;
 
         [ObservableProperty]
         private ObservableCollection<Category> _categories;
@@ -32,15 +37,21 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private Question _selectedCategory;
 
         [ObservableProperty]
-        private Question _selectedTemplate;
+        private TestTemplate _selectedTemplate;
 
         public DataViewModel(QuestionsService questionsService, TemplatesService templatesService )
         {
             _questionsService = questionsService;
             _templatesService = templatesService;
         }
+        public class TemplatesWithQuestions()
+        {
+            public string questionName { get; set; }
+            public bool isInPool { get; set; }
+            public long id { get; set; }
+            public string categoryName { get; set; }
 
-
+        }
         public void OnNavigatedTo()
         {
             if (!_isInitialized)
@@ -51,39 +62,46 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         public void OnNavigatedFrom() { }
 
 
-        public ObservableCollection<Question> GetQuestionsWithGivenCategory(Category category)
+        public ObservableCollection<TemplatesWithQuestions> GetQuestionsWithGivenCategory(Category category)
         {
-            return new ObservableCollection<Question>(_questionsService.GetQuestionsWithGivenCategory(category));
+            var questions = new List<Question>(_questionsService.GetQuestionsWithGivenCategory(category));
+
+            return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions {id=x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name,  }).ToList());
         }
         public void InitializeViewModel()
         {
             Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
 
             Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
+            
+            QuestionsNotChanged = new ObservableCollection<Question>(_questionsService.GetAllQuestions());
 
             Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
         }
-        private ObservableCollection<Question> QuestionsListToObservableColleciton(List<Question> questions)
+        private ObservableCollection<TemplatesWithQuestions> QuestionsListToObservableColleciton(List<Question> questions)
         {
-            return new ObservableCollection<Question>(questions.Select(x =>
-            {
-                x.QuestionAnswers = new ObservableCollection<QuestionAnswer>(x.QuestionAnswers);
-
-                return x;
-            }).ToList());
+            return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions {id = x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name}).ToList());
         }
 
 
         [RelayCommand]
         private void SaveTemplate()
         {
-          /*  _templatesService.SaveTemplate(_selectedTemplate).ContinueWith(x =>
+            foreach (var question in Questions)
+            {
+                if (question.isInPool)
+                {
+                    Question question1 = QuestionsNotChanged.Where(p=>p.QuestionContent==question.questionName).FirstOrDefault();
+                    _selectedTemplate.QuestionPool.Add(question1);
+                }
+            }
+
+          _templatesService.SaveTemplate(_selectedTemplate).ContinueWith(x =>
             {
                 Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
             });
-          */
+         
         }
-
 
         [RelayCommand]
         private async Task AddTemplate()
