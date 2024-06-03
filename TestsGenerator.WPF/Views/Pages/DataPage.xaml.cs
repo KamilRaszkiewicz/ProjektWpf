@@ -65,6 +65,17 @@ namespace TestsGenerator.WPF.Views.Pages
         }
 
 
+        private void generate_templates (object sender, RoutedEventArgs e)
+        {
+            TextInputDialog dialog = new TextInputDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                string userInput = dialog.InputText;
+                // Zrób coś z wprowadzonym tekstem
+            }
+
+        }
+
 
     }
 }
