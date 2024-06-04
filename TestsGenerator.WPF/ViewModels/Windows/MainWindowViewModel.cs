@@ -6,7 +6,7 @@ namespace TestsGenerator.WPF.ViewModels.Windows
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _applicationTitle = "WPF UI - TestsGenerator.WPF";
+        private string _applicationTitle = "Generator testów";
 
         [ObservableProperty]
         private ObservableCollection<object> _menuItems = new()

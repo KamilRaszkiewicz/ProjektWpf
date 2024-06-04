@@ -31,6 +31,10 @@ namespace TestsGenerator.WPF.Views.Pages
             {
                 return;
             }
+            else if(item.Name== "Wszystkie pytania")
+            {
+                ViewModel.Questions = ViewModel.GetQuestions();
+            }
             else
             {
                 ViewModel.Questions = ViewModel.GetQuestionsWithGivenCategory(item);
@@ -40,7 +44,6 @@ namespace TestsGenerator.WPF.Views.Pages
         private void Add_template(object sender, RoutedEventArgs e)
         {
             ViewModel.AddTemplateCommand.Execute(this);
-
         }
         private void Template_SelectionChanged(object sender, RoutedEventArgs e)
         {

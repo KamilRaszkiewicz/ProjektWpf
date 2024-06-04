@@ -17,7 +17,12 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TreeView Name="treeView" Margin="0,0,428,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/> 
+            <ColumnDefinition Width="5*"/> 
+        </Grid.ColumnDefinitions>
+        <TreeView Name="treeView" Grid.Column="0" HorizontalAlignment="Stretch">
             <TreeViewItem Header="Test 1">
                 <TreeViewItem Header="Pytanie 1">
                     <TreeViewItem Header="Odpowiedź 1" />
@@ -45,9 +50,10 @@
         <ui:DataGrid
             CanUserResizeColumns="False"
             CanUserResizeRows="False"
+            HorizontalAlignment="Stretch"
             Width="{Binding ActualWidth,Mode=OneWay}"
             AutoGenerateColumns="False"
-            x:Name="Answers_Grid" Margin="420,0,0,0">
+            x:Name="Answers_Grid" Grid.Column="2">
             <ui:DataGrid.Columns>
                 <DataGridTextColumn 
                     Header="Test"

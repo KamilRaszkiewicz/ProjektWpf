@@ -61,7 +61,11 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
         public void OnNavigatedFrom() { }
 
-
+        public ObservableCollection<TemplatesWithQuestions> GetQuestions()
+        {
+            var questions = new List<Question>(_questionsService.GetAllQuestions());
+            return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions { id = x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name, }).ToList());
+        }
         public ObservableCollection<TemplatesWithQuestions> GetQuestionsWithGivenCategory(Category category)
         {
             var questions = new List<Question>(_questionsService.GetQuestionsWithGivenCategory(category));
@@ -72,12 +76,19 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         {
             Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
 
-            Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
-            
             QuestionsNotChanged = new ObservableCollection<Question>(_questionsService.GetAllQuestions());
+            Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
+            var categories = new ObservableCollection<Category>(_questionsService.GetCategories());
 
-            Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
+            Category all = new Category();
+            all.Name = "Wszystkie pytania";
+            categories.Insert(0,all);
+            Categories = categories;
+
+            // Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
         }
+
+
         private ObservableCollection<TemplatesWithQuestions> QuestionsListToObservableColleciton(List<Question> questions)
         {
             return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions {id = x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name}).ToList());
@@ -112,6 +123,10 @@ namespace TestsGenerator.WPF.ViewModels.Pages
                 Tests = new List<Test>()
             };
             Templates.Add(temp);
+           await _templatesService.SaveTemplate(temp).ContinueWith(x =>
+            {
+                Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
+            });
 
             
         }
