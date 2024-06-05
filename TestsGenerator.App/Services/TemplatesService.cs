@@ -33,7 +33,14 @@ namespace TestsGenerator.App.Services
                 .ToList();
         }
 
-
+        public List<Test> GetAllTests()
+        {
+            return _testsRepository
+                .GetQueryable()
+                .Include(x => x.VersionIdentifier)
+                .Include(x => x.QuestionsOrdinals)
+                .ToList();
+        }
 
         public async Task SaveTemplate(TestTemplate template)
         {
@@ -44,6 +51,18 @@ namespace TestsGenerator.App.Services
             else
             {
                 await _templatesRepository.UpdateAsync(template, CancellationToken.None);
+            }
+        }
+
+        public async Task SaveTest(Test test)
+        {
+            if (test.Id == default)  //nowy szablon
+            {
+                await _testsRepository.InsertAsync(test, CancellationToken.None);
+            }
+            else
+            {
+                await _testsRepository.UpdateAsync(test, CancellationToken.None);
             }
         }
     }

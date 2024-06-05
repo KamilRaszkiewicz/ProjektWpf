@@ -130,5 +130,11 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
             
         }
+
+        [RelayCommand]
+        private async Task AddTests(Test tests)
+        {
+            await _templatesService.SaveTest(tests);
+        }
     }
 }

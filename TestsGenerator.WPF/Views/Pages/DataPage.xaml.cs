@@ -71,15 +71,49 @@ namespace TestsGenerator.WPF.Views.Pages
         private void generate_templates (object sender, RoutedEventArgs e)
         {
             TextInputDialog dialog = new TextInputDialog();
-            if (dialog.ShowDialog() == true)
+            int testCount = int.Parse(valueTextBox.Text);
+            var template = ViewModel.SelectedTemplate;
+            if (template == null || testCount==0 || template.QuestionPool.Count<=5)
             {
-                string userInput = dialog.InputText;
-                // Zrób coś z wprowadzonym tekstem
+                Error error = new Error();
+                error.ShowDialog();
+            }
+            else if (dialog.ShowDialog() == true)
+            {
+                Test test = new Test();
+                test.VersionIdentifier = dialog.InputText;
+                List<TestQuestionOrdinal> testList = new List<TestQuestionOrdinal>();
+               for (int i = 0;i<testCount; i++)
+                {
+                    var randomQuestions = GetRandomQuestions(template.QuestionPool, 5);
+                    
+                    foreach(var question  in randomQuestions )
+                    {
+                        TestQuestionOrdinal testQuestion = new TestQuestionOrdinal();
+                        testQuestion.Question = question;
+                        testList.Add(testQuestion);
+                    }
+                }
+               test.QuestionsOrdinals = testList;
+               ViewModel.AddTestsCommand.Execute(test);
+            }
+            else
+            {
+                return;
             }
 
         }
 
+        public static List<T> GetRandomQuestions<T>(List<T> list, int count)
+        {
+            if (count > list.Count)
+            {
+                throw new ArgumentException("Count cannot be greater than the number of elements in the list.");
+            }
 
+            var random = new Random();
+            return list.OrderBy(x => random.Next()).Take(count).ToList();
+        }
     }
 }
 
