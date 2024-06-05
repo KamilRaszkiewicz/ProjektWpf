@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Controls;
+using TestsGenerator.Domain.Models.Questions;
+using TestsGenerator.Domain.Models.Tests;
 using TestsGenerator.WPF.ViewModels.Pages;
 using Wpf.Ui.Controls;
 
@@ -10,7 +12,7 @@ namespace TestsGenerator.WPF.Views.Pages
     public partial class ExamsPage : INavigableView<ExamsViewModel>
     {
 
-        private ObservableCollection<TestSheet> TestCollection = new ObservableCollection<TestSheet>();
+       
 
         public ExamsViewModel ViewModel { get; }
         public ExamsPage(ExamsViewModel viewModel)
@@ -19,23 +21,11 @@ namespace TestsGenerator.WPF.Views.Pages
             InitializeComponent();
             
         }
-
-    }
-    public class TestSheet
-    {
-        public string Title { get; set; }
-        public List<Questions> Questions { get; set; }
-    }
-
-    public class Questions
-    {
-        public string Content { get; set; }
-        public List<Answerss> Answers { get; set; }
+        private void Test_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listView = sender as System.Windows.Controls.ListView;
+            ViewModel.SelectedTest = (Test)listView.SelectedItem;
+        }
     }
 
-    public class Answerss
-    {
-        public string Content { get; set; }
-        public bool IsCorrect { get; set; }
-    }
 }

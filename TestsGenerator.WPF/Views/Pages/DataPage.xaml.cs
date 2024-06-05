@@ -19,31 +19,101 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             ViewModel = viewModel;
             _pdfService = pdfService;
-            DataContext = this;
-
             InitializeComponent();
-            for (int i = 1; i <= 10; i++)
+            DataContext = this;
+        }
+
+        private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = Categories_ComboBox.SelectedItem as Category;
+
+            if (item == null)
             {
-                listView.Items.Add("Szablon " + i.ToString());
+                return;
             }
+            else if(item.Name== "Wszystkie pytania")
+            {
+                ViewModel.Questions = ViewModel.GetQuestions();
+            }
+            else
+            {
+                ViewModel.Questions = ViewModel.GetQuestionsWithGivenCategory(item);
+            }
+
         }
         private void Add_template(object sender, RoutedEventArgs e)
         {
-            listView.Items.Add("Nowy szablon");
+            ViewModel.AddTemplateCommand.Execute(this);
         }
-
-        private void Change_Template_Name(object sender, RoutedEventArgs e)
+        private void Template_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (listView.SelectedItem != null)
+            var listView = sender as System.Windows.Controls.ListView;
+            var template = (TestTemplate)listView.SelectedItem;
+            ViewModel.SelectedTemplate = template;
+            foreach(var question in ViewModel.Questions)
             {
-                Debug.Print(listView.SelectedItem.ToString() + " " + template_name.Text);
-                listView.SelectedItem = template_name.Text;
-                listView.Items.Refresh();
-
+                foreach (var q in template.QuestionPool)
+                {
+                    if (question.questionName == q.QuestionContent)
+                    {      
+                        question.isInPool = true; break;
+                    }
+                    else
+                    {
+                        question.isInPool = false;
+                    }
+                }
             }
 
         }
-    }
 
+
+        private void generate_templates (object sender, RoutedEventArgs e)
+        {
+            TextInputDialog dialog = new TextInputDialog();
+            int testCount = int.Parse(valueTextBox.Text);
+            var template = ViewModel.SelectedTemplate;
+            if (template == null || testCount==0 || template.QuestionPool.Count<=5)
+            {
+                Error error = new Error();
+                error.ShowDialog();
+            }
+            else if (dialog.ShowDialog() == true)
+            {
+                Test test = new Test();
+                test.VersionIdentifier = dialog.InputText;
+                List<TestQuestionOrdinal> testList = new List<TestQuestionOrdinal>();
+               for (int i = 0;i<testCount; i++)
+                {
+                    var randomQuestions = GetRandomQuestions(template.QuestionPool, 5);
+                    
+                    foreach(var question  in randomQuestions )
+                    {
+                        TestQuestionOrdinal testQuestion = new TestQuestionOrdinal();
+                        testQuestion.Question = question;
+                        testList.Add(testQuestion);
+                    }
+                }
+               test.QuestionsOrdinals = testList;
+               ViewModel.AddTestsCommand.Execute(test);
+            }
+            else
+            {
+                return;
+            }
+
+        }
+
+        public static List<T> GetRandomQuestions<T>(List<T> list, int count)
+        {
+            if (count > list.Count)
+            {
+                throw new ArgumentException("Count cannot be greater than the number of elements in the list.");
+            }
+
+            var random = new Random();
+            return list.OrderBy(x => random.Next()).Take(count).ToList();
+        }
+    }
 }
 

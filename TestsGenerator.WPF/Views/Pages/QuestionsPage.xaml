@@ -14,7 +14,6 @@
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
-
     <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" MaxWidth="1000" x:Name="TopLevelGrid">
         <StackPanel Margin="10">
             <Grid Margin="0,0,0,10">
@@ -80,8 +79,7 @@
                     Grid.Column="2"
                     HorizontalAlignment="Stretch"
                     ItemsSource="{Binding ViewModel.Categories}"
-                    SelectedItem="{Binding ViewModel.SelectedQuestion.Category, Mode=TwoWay}"
-                    x:Name="Categories">
+                    SelectedItem="{Binding ViewModel.SelectedQuestion.Category, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}"/>

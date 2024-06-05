@@ -32,6 +32,15 @@ namespace TestsGenerator.App.Services
                 .ToList();
         }
 
+        public List<Question> GetQuestionsWithGivenCategory(Category category)
+        {
+            return _questionsRepository
+                .GetQueryable()
+                .Include(x => x.Category)
+                .Where(x => x.Category == category)
+                .ToList();
+        }
+
         public async Task SaveQuestion(Question question)
         {
             if(question.Id == default)  //nowe pytanie

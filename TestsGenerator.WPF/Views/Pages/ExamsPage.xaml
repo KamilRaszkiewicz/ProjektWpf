@@ -8,7 +8,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="ExamsPage"
     d:DataContext="{d:DesignInstance local:ExamsPage,
-                                     IsDesignTimeCreatable=False}"
+    IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -17,31 +17,50 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TreeView Name="treeView">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/> 
+            <ColumnDefinition Width="5*"/> 
+        </Grid.ColumnDefinitions>
+        <TreeView Name="treeView" Grid.Column="0" HorizontalAlignment="Stretch"
+        ItemsSource="{Binding ViewModel.SelectedTest, Mode=OneWay}">
+            <TreeView.ItemTemplate>
+                <DataTemplate>
+                    <TreeViewItem
+                         Header="Test1">
+                        <TreeViewItem Header="{Binding QuestionsOrdinals, Mode=OneWay}"/>
+                    </TreeViewItem>
+                </DataTemplate>
+            </TreeView.ItemTemplate>
             <TreeViewItem Header="Test 1">
                 <TreeViewItem Header="Pytanie 1">
                     <TreeViewItem Header="Odpowiedź 1" />
                     <TreeViewItem Header="Odpowiedź 1" />
                 </TreeViewItem>
-                <TreeViewItem Header="Pytanie 2">
-                    <TreeViewItem Header="Odpowiedź 1" />
-                    <TreeViewItem Header="Odpowiedź 2" />
-                </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Header="Test 2">
-                <TreeViewItem Header="Pytanie 1">
-                    <TreeViewItem Header="Odpowiedź 1">
-                 
-                    </TreeViewItem>
-                    <TreeViewItem Header="Odpowiedź 2" />
-                </TreeViewItem>
-                <TreeViewItem Header="Pytanie 2">
-                    <TreeViewItem Header="Odpowiedź 1" />
-                    <TreeViewItem Header="Odpowiedź 2" />
-                </TreeViewItem>
-            </TreeViewItem>
-            
-        </TreeView>
 
+        </TreeView>
+        <ListView 
+            Background="#fcfdff" 
+            BorderThickness="1"
+            BorderBrush="#bebebe"
+            Grid.Column="2"
+            ItemsSource="{Binding ViewModel.Tests, Mode=OneWay}"
+            SelectionChanged="Test_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ui:TextBlock
+                        Height="40"
+                        Margin="4"
+                        Padding="4"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Appearance="Secondary"
+                        Foreground="Black"
+                        OverridesDefaultStyle="True"
+                        Text="{Binding VersionIdentifier, Mode=OneWay}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

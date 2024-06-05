@@ -6,7 +6,7 @@ namespace TestsGenerator.WPF.ViewModels.Windows
     public partial class MainWindowViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _applicationTitle = "WPF UI - TestsGenerator.WPF";
+        private string _applicationTitle = "Generator testów";
 
         [ObservableProperty]
         private ObservableCollection<object> _menuItems = new()
@@ -15,7 +15,7 @@ namespace TestsGenerator.WPF.ViewModels.Windows
             {
                 Content = "Pytania",
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
-                TargetPageType = typeof(Views.Pages.DashboardPage)
+                TargetPageType = typeof(Views.Pages.QuestionsPage)
 
             },
             new NavigationViewItem()

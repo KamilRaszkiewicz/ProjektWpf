@@ -29,8 +29,6 @@ namespace TestsGenerator.WPF.Views.Pages
         public QuestionsPage(QuestionsViewModel viewModel)
         {
             ViewModel = viewModel;
-
-
             InitializeComponent();
             DataContext = this;
         }
@@ -47,12 +45,14 @@ namespace TestsGenerator.WPF.Views.Pages
                 return;
             }
 
-            //Podejscie 1 - robimy zmiany bezposrednio tu
+            QuestionAnswer qanswer = new QuestionAnswer();
+            Answer answer = new Answer();
+            answer.Content = "Nowa odpowiedź";
+            qanswer.Answer = answer;
 
-            ViewModel.SelectedQuestion.QuestionAnswers.Add(new QuestionAnswer
-            {
-                Answer = new Answer()
-            });
+            ViewModel.SelectedQuestion.QuestionAnswers.Add(qanswer);
+
+
         }
 
         private void Delete_Answer(object sender, RoutedEventArgs e)
