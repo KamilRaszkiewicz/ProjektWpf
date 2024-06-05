@@ -45,6 +45,7 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             ViewModel.AddTemplateCommand.Execute(this);
         }
+
         private void Template_SelectionChanged(object sender, RoutedEventArgs e)
         {
             var listView = sender as System.Windows.Controls.ListView;

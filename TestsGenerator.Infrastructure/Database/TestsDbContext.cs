@@ -30,12 +30,16 @@ namespace TestsGenerator.Infrastructure.Database
                 Name = "Lubie placki"
             };
 
-            var template1 = new TestTemplate
-            {
-                Name = "HightHigger",
-            };
+            var toInsert = new List<Category> { category1, category2 };
 
-            Categories.AddRange(category1, category2);
+
+            foreach(var c in toInsert)
+            {
+                if (!Categories.Any(x => x.Name.ToLower() == c.Name.ToLower()))
+                {
+                    Categories.Add(c);
+                }
+            }
 
             Database.EnsureCreated();
 
