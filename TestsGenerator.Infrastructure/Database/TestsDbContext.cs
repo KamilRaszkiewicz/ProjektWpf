@@ -18,28 +18,13 @@ namespace TestsGenerator.Infrastructure.Database
 
         public TestsDbContext(DbContextOptions<TestsDbContext> options) : base(options)
         {
+            /*
             Database.EnsureCreated();
 
             var category1 = new Category
             {
                 Name = "Okoń"
             };
-
-            var category2 = new Category
-            {
-                Name = "Lubie placki"
-            };
-
-            var toInsert = new List<Category> { category1, category2 };
-
-
-            foreach(var c in toInsert)
-            {
-                if (!Categories.Any(x => x.Name.ToLower() == c.Name.ToLower()))
-                {
-                    Categories.Add(c);
-                }
-            }
 
             Database.EnsureCreated();
 
@@ -86,6 +71,7 @@ namespace TestsGenerator.Infrastructure.Database
                     }
                 }
             );
+            */
 
             SaveChanges();
         }

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TestsGenerator.App.Services;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.WPF.ViewModels.Pages;
 using Wpf.Ui.Controls;
@@ -24,10 +25,17 @@ namespace TestsGenerator.WPF.Views.Pages
     /// </summary>
     public partial class QuestionsPage : INavigableView<QuestionsViewModel>
     {
+        private readonly QuestionsService _questionsService;
+
         public QuestionsViewModel ViewModel { get; }
 
-        public QuestionsPage(QuestionsViewModel viewModel)
+        public QuestionsPage(
+            QuestionsViewModel viewModel,
+            QuestionsService questionsService
+            )
         {
+            _questionsService = questionsService;
+
             ViewModel = viewModel;
             InitializeComponent();
             DataContext = this;
@@ -51,8 +59,6 @@ namespace TestsGenerator.WPF.Views.Pages
             qanswer.Answer = answer;
 
             ViewModel.SelectedQuestion.QuestionAnswers.Add(qanswer);
-
-
         }
 
         private void Delete_Answer(object sender, RoutedEventArgs e)
@@ -68,6 +74,20 @@ namespace TestsGenerator.WPF.Views.Pages
 
             var qa = ViewModel.SelectedQuestion.QuestionAnswers.First(x => x.Answer == item);
             ViewModel.SelectedQuestion.QuestionAnswers.Remove(qa);
+        }
+
+
+        private async void Add_Catgegory(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CategoryDialog();
+
+            dialog.ShowDialog();
+
+            if (dialog.DialogResult == true)
+            {
+                await _questionsService.AddCategoryAsync(dialog.InputText);
+                ViewModel.Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
+            }
         }
     }
 }

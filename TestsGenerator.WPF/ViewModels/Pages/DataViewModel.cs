@@ -34,7 +34,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private ObservableCollection<TestTemplate> _templates;
 
         [ObservableProperty]
-        private Question _selectedCategory;
+        private Category _selectedCategory;
 
         [ObservableProperty]
         private TestTemplate _selectedTemplate;
@@ -49,6 +49,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
             public string questionName { get; set; }
             public bool isInPool { get; set; }
             public long id { get; set; }
+            public long categoryId { get; set; }
             public string categoryName { get; set; }
 
         }
@@ -91,7 +92,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
         private ObservableCollection<TemplatesWithQuestions> QuestionsListToObservableColleciton(List<Question> questions)
         {
-            return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions {id = x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name}).ToList());
+            return new ObservableCollection<TemplatesWithQuestions>(questions.Select(x => new TemplatesWithQuestions {id = x.Id, questionName = x.QuestionContent, categoryName = x.Category.Name, categoryId = x.Category.Id}).ToList());
         }
 
 

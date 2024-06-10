@@ -14,22 +14,27 @@
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+    <Page.Resources>
+
+        <SolidColorBrush x:Key="ControlBgDefault" Color="{DynamicResource ControlFillColorDefault}" />
+    </Page.Resources>
+    
     <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch" MaxWidth="1000" x:Name="TopLevelGrid">
         <StackPanel Margin="10">
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ListView 
+                <StackPanel Background="{DynamicResource ControlBgDefault}">
+                    <ui:ListView 
                     ItemsSource="{Binding ViewModel.Questions, Mode=OneWay}" 
-                    Height="240" 
-                    Background="#fcfdff" 
-                    BorderThickness="1"
-                    BorderBrush="#bebebe"
+                    Height="240"
+                    SelectedItem="{Binding ViewModel.SelectedQuestion}"
                     SelectionChanged="Question_SelectionChanged">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ui:TextBlock
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ui:TextBlock
                                 Height="40"
                                 Margin="4"
                                 Padding="4"
@@ -39,53 +44,16 @@
                                 Foreground="Black"
                                 OverridesDefaultStyle="True"
                                 Text="{Binding QuestionContent, Mode=OneWay}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ui:ListView>
+                </StackPanel>
             </Grid>
 
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <ui:TextBlock 
-                    Grid.Column="0"
-                    Height="30"
-                    HorizontalAlignment="Stretch"/>
-            </Grid>
-            <Grid x:Name="QuestionsContentGrid" Margin="0,0,0,10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="8*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="4*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-   
-                <StackPanel
-                    x:Name="OverlappingWorkaroundStackpanel"
-                    Grid.Column="0"
-                    HorizontalAlignment="Stretch">
-                    <ui:TextBox
-                        MaxWidth="{Binding ActualWidth, ElementName=OverlappingWorkaroundStackpanel, Mode=OneWay}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        TextWrapping="Wrap" 
-                        Text="{Binding ViewModel.SelectedQuestion.QuestionContent}"
-                        />
-                </StackPanel>
-
-                <ComboBox
-                    Grid.Column="2"
-                    HorizontalAlignment="Stretch"
-                    ItemsSource="{Binding ViewModel.Categories}"
-                    SelectedItem="{Binding ViewModel.SelectedQuestion.Category, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
 
                 <ui:Button
                     Grid.Column="4"
@@ -95,7 +63,60 @@
                     Command="{Binding ViewModel.AddQuestionCommand}"
                 />
             </Grid>
+            <Grid x:Name="QuestionsContentGrid" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
                 
+
+   
+                <StackPanel
+                    x:Name="OverlappingWorkaroundStackpanel"
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch">
+                    <ui:TextBox
+                        x:Name="textboxQuestion"
+                        PlaceholderText="Treść pytania"
+                        MaxWidth="{Binding ActualWidth, ElementName=OverlappingWorkaroundStackpanel, Mode=OneWay}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        TextWrapping="Wrap" 
+                        Text="{Binding ViewModel.SelectedQuestion.QuestionContent}"
+                             />
+                </StackPanel>
+
+                <ComboBox
+                    x:Name="comboboxCategory"
+                    Grid.Column="2"
+                    IsEditable="True"
+                    IsReadOnly="True"
+                    TextSearch.TextPath="Name" 
+                    Text=" -- Wybierz kategorię --"
+                    HorizontalAlignment="Stretch"
+                    ItemsSource="{Binding ViewModel.Categories}"
+                    SelectedItem="{Binding ViewModel.SelectedQuestion.Category, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <ui:TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+
+
+                <ui:Button
+                    Grid.Column="4"
+                    Content="Dodaj"
+                    Icon="Fluent24"
+                    HorizontalAlignment="Stretch"
+                    Click="Add_Catgegory"
+                />
+            </Grid>
+
             <Grid Margin="0,0,0,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
@@ -113,14 +134,10 @@
                     Click="Add_Answer"/>
 
             </Grid>
-            <!--
-            <ui:Button 
-                Content="+"
-                Width="36" 
-                Click="Add_Category"/>
--->
+            
             <ui:DataGrid
                 CanUserResizeColumns="False"
+                CanUserAddRows="False"
                 CanUserResizeRows="False"
                 Width="{Binding ActualWidth, ElementName=QuestionsContentGrid, Mode=OneWay}"
                 ItemsSource="{Binding ViewModel.SelectedQuestion.QuestionAnswers, Mode=TwoWay}"
@@ -135,7 +152,7 @@
                     <DataGridCheckBoxColumn
                         Header="Poprawna" 
                         Width="auto"
-                        Binding="{Binding IsCorrect, Mode=TwoWay}">
+                        Binding="{Binding IsCorrect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </DataGridCheckBoxColumn>
                 </DataGrid.Columns>
             </ui:DataGrid>
@@ -148,7 +165,24 @@
                     Grid.Column="0"
                     Content="Zapisz Pytanie" 
                     HorizontalAlignment="Stretch"
-                    Command="{Binding ViewModel.SaveQuestionCommand}"/>
+                    Command="{Binding ViewModel.SaveQuestionCommand}" Appearance="Secondary">
+                    <ui:Button.Style>
+                        <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, ElementName=textboxQuestion, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedItem, ElementName=comboboxCategory, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HasItems, ElementName=Answers_Grid, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Button.Style>
+                </ui:Button>
+
             </Grid>
         </StackPanel>
     </Grid>
