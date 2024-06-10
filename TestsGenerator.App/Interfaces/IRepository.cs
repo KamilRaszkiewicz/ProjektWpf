@@ -16,5 +16,7 @@ namespace TestsGenerator.App.Interfaces
         Task UpdateAsync(IEnumerable<T> entities, CancellationToken ct);
         Task DeleteAsync(T entity, CancellationToken ct);
         Task DeleteAsync(IEnumerable<T> entities, CancellationToken ct);
+        void Attach<TEntity>(TEntity entity) where TEntity: class;
+        void Attach<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
     }
 }

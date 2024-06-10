@@ -37,6 +37,7 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.RowSpan="2"
+            Background="#B3FFFFFF"
             x:Name="TemplateList"
             ItemsSource="{Binding ViewModel.Templates}"
             SelectionChanged="Template_SelectionChanged"
@@ -93,10 +94,12 @@
                     <ColumnDefinition Width="3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <ComboBox
-                ItemsSource="{Binding ViewModel.Categories}"
-                SelectionChanged="Category_SelectionChanged"
-                Grid.Column="0"
-                x:Name="Categories_ComboBox"   >
+                    ItemsSource="{Binding ViewModel.Categories}"
+                    SelectionChanged="Category_SelectionChanged"
+                    Grid.Column="0"
+                    x:Name="Categories_ComboBox"
+                    Initialized="Categories_ComboBox_Initialized"
+                    >
                     <ComboBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform />
@@ -120,20 +123,26 @@
                 CanUserResizeColumns="False"
                 CanUserResizeRows="False"
                 Width="{Binding ActualWidth, ElementName=QuestionsContentGrid, Mode=OneWay}"
-                ItemsSource="{Binding ViewModel.Questions, Mode=OneWay}"
+                ItemsSource="{Binding QuestionsCVS.View, Mode=OneWay}"
                 AutoGenerateColumns="False"
+                CanUserAddRows="False"
                 x:Name="Answers_Grid" Margin="0,245,0,5">
             <DataGrid.Columns>
                 <DataGridTextColumn 
-                        Header="Odpowiedz"
+                        Header="Pytanie"
                         Width="*"
                         Binding="{Binding questionName, Mode=OneWay}"
                         ></DataGridTextColumn>
-                <DataGridCheckBoxColumn
-                        Binding="{Binding isInPool, Mode=TwoWay}"
-                        Header="W Tescie" 
-                        Width="auto">
-                </DataGridCheckBoxColumn>
+                <DataGridTemplateColumn Header="W Tescie" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox                         
+                                IsChecked="{Binding isInPool, Mode=TwoWay}"
+                                Click="InPoolClicked"
+                            />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </ui:DataGrid>
     </Grid>

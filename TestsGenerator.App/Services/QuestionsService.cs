@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +49,8 @@ namespace TestsGenerator.App.Services
             }
             else
             {
+                _questionsRepository.Attach(question.Answers.Where(x => x.Id != default));
+
                 await _questionsRepository.UpdateAsync(question, CancellationToken.None);
             }    
         }
@@ -58,6 +60,23 @@ namespace TestsGenerator.App.Services
             return _categoriesRepository
                 .GetQueryable()
                 .ToList();
+        }
+
+        public async Task AddCategoryAsync(string name)
+        {
+            var categoryExists = _categoriesRepository
+                .GetQueryable()
+                .Any(x => x.Name.ToLower() == name.ToLower());
+
+            if (categoryExists)
+            {
+                return;
+            }
+
+            await _categoriesRepository.InsertAsync(new Category
+            {
+                Name = name
+            }, CancellationToken.None);
         }
     }
 }

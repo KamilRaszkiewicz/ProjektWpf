@@ -25,11 +25,13 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         {
             //podejscie 2 - robimy zmiany w komendzie *** ZALECAM ***
 
-            _questions.Add(new Question
+            var question = new Question
             {
                 QuestionAnswers = new ObservableCollection<QuestionAnswer>()
-            });
+            };
 
+            _questions.Add(question);
+            SelectedQuestion = question;
         }
 
        
@@ -53,7 +55,9 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         {
             Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
 
-            Categories = new ObservableCollection<Category>(_questionsService.GetCategories());
+            var c = _questionsService.GetCategories();
+
+            Categories = new ObservableCollection<Category>(c);
         }
 
         private ObservableCollection<Question> QuestionsListToObservableColleciton(List<Question> questions)

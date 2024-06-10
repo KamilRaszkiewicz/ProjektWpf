@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -106,6 +107,11 @@ namespace TestsGenerator.WPF
 #endif
 
             _host.Start();
+
+            foreach (DictionaryEntry resource in Application.Current.Resources)
+            {
+                Console.WriteLine($"DYNRES Key: {resource.Key}, Value: {resource.Value}");
+            }
         }
 
         /// <summary>

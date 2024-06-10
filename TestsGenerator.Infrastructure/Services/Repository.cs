@@ -67,5 +67,15 @@ namespace TestsGenerator.Infrastructure.Services
 
             await _ctx.SaveChangesAsync(ct);
         }
+
+        public void Attach<TEntity>(TEntity entity) where TEntity : class
+        {
+            _ctx.Set<TEntity>().Attach(entity);
+        }
+
+        public void Attach<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        {
+            _ctx.Set<TEntity>().AttachRange(entities);
+        }
     }
 }

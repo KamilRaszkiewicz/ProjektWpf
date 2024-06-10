@@ -18,24 +18,13 @@ namespace TestsGenerator.Infrastructure.Database
 
         public TestsDbContext(DbContextOptions<TestsDbContext> options) : base(options)
         {
+            /*
             Database.EnsureCreated();
 
             var category1 = new Category
             {
                 Name = "Okoń"
             };
-
-            var category2 = new Category
-            {
-                Name = "Lubie placki"
-            };
-
-            var template1 = new TestTemplate
-            {
-                Name = "HightHigger",
-            };
-
-            Categories.AddRange(category1, category2);
 
             Database.EnsureCreated();
 
@@ -82,6 +71,7 @@ namespace TestsGenerator.Infrastructure.Database
                     }
                 }
             );
+            */
 
             SaveChanges();
         }

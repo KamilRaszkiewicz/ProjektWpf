@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using System.Diagnostics;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using TestsGenerator.App.Interfaces;
 using TestsGenerator.Domain.Models.Questions;
@@ -27,17 +29,13 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             var item = Categories_ComboBox.SelectedItem as Category;
 
-            if (item == null)
+            if(item == null || item.Name == "Wszystkie pytania")
             {
-                return;
-            }
-            else if(item.Name== "Wszystkie pytania")
-            {
-                ViewModel.Questions = ViewModel.GetQuestions();
+                Answers_Grid.ItemsSource = ViewModel.Questions;
             }
             else
             {
-                ViewModel.Questions = ViewModel.GetQuestionsWithGivenCategory(item);
+                Answers_Grid.ItemsSource = ViewModel.Questions.Where(x => x.categoryId == item.Id);
             }
 
         }
@@ -45,6 +43,7 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             ViewModel.AddTemplateCommand.Execute(this);
         }
+
         private void Template_SelectionChanged(object sender, RoutedEventArgs e)
         {
             var listView = sender as System.Windows.Controls.ListView;
@@ -113,6 +112,18 @@ namespace TestsGenerator.WPF.Views.Pages
 
             var random = new Random();
             return list.OrderBy(x => random.Next()).Take(count).ToList();
+        }
+
+        private void Categories_ComboBox_Initialized(object sender, EventArgs e)
+        {
+            var cb = sender as ComboBox;
+
+            cb.SelectedIndex = 0;
+        }
+
+        private void InPoolClicked(object sender, EventArgs e)
+        {
+            
         }
     }
 }
