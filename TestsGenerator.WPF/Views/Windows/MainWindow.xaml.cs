@@ -1,4 +1,5 @@
-﻿using TestsGenerator.WPF.ViewModels.Windows;
+﻿using System.Windows.Controls;
+using TestsGenerator.WPF.ViewModels.Windows;
 using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
@@ -8,6 +9,7 @@ namespace TestsGenerator.WPF.Views.Windows
     public partial class MainWindow : INavigationWindow
     {
         public MainWindowViewModel ViewModel { get; }
+        public static MainWindow MainWindowRef { get; private set; }
 
         public MainWindow(
             MainWindowViewModel viewModel,
@@ -24,6 +26,7 @@ namespace TestsGenerator.WPF.Views.Windows
             SetPageService(pageService);
 
             navigationService.SetNavigationControl(RootNavigation);
+            MainWindowRef = this;
         }
 
         #region INavigationWindow methods

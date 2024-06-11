@@ -22,7 +22,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private bool _isInitialized = false;
 
         [ObservableProperty]
-        private ObservableCollection<TemplatesWithQuestions> _questions;
+        private ObservableCollection<Question> _templateQuestions;
 
         [ObservableProperty]
         private ObservableCollection<Question> _questionsNotChanged;
@@ -38,6 +38,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
         [ObservableProperty]
         private TestTemplate _selectedTemplate;
+
 
         public DataViewModel(QuestionsService questionsService, TemplatesService templatesService )
         {
@@ -78,7 +79,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
             Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
 
             QuestionsNotChanged = new ObservableCollection<Question>(_questionsService.GetAllQuestions());
-            Questions = QuestionsListToObservableColleciton(_questionsService.GetAllQuestions());
+            TemplateQuestions = new ObservableCollection<Question>();
             var categories = new ObservableCollection<Category>(_questionsService.GetCategories());
 
             Category all = new Category();
@@ -99,6 +100,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         [RelayCommand]
         private void SaveTemplate()
         {
+            /*
             foreach (var question in Questions)
             {
                 if (question.isInPool)
@@ -112,8 +114,39 @@ namespace TestsGenerator.WPF.ViewModels.Pages
             {
                 Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
             });
-         
+         */
         }
+
+        [RelayCommand]
+        private void ChangeTemplate(TestTemplate template)
+        {
+            SelectedTemplate = template;
+            TemplateQuestions.Clear();
+
+            foreach(var q in template.QuestionPool)
+            {
+                TemplateQuestions.Add(q);
+            }
+        }
+
+        [RelayCommand]
+        private void AddQuestionsToTemplate(IEnumerable<Question> questions)
+        {
+            foreach(var q in questions)
+            {
+                TemplateQuestions.Add(q);
+            }
+        }
+
+        [RelayCommand]
+        private void RemoveQuestionsFromTemplate(IEnumerable<Question> questions)
+        {
+            foreach (var q in questions)
+            {
+                TemplateQuestions.Remove(q);
+            }
+        }
+
 
         [RelayCommand]
         private async Task AddTemplate()
