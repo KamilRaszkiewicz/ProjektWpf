@@ -7,7 +7,9 @@ using TestsGenerator.App.Interfaces;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.Domain.Models.Tests;
 using TestsGenerator.WPF.ViewModels.Pages;
+using TestsGenerator.WPF.Views.Windows;
 using Wpf.Ui.Controls;
+using System.Linq;
 
 namespace TestsGenerator.WPF.Views.Pages
 {
@@ -15,29 +17,49 @@ namespace TestsGenerator.WPF.Views.Pages
     {
         public DataViewModel ViewModel { get; }
 
+        public MainWindow MainWindowRef { get; set; }
+
         private readonly IPdfService _pdfService;
 
         public DataPage(DataViewModel viewModel, IPdfService pdfService)
         {
             ViewModel = viewModel;
             _pdfService = pdfService;
+
+            MainWindowRef = MainWindow.MainWindowRef;
+
             InitializeComponent();
             DataContext = this;
+
         }
 
-        private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ApplyLVAllQuestionsFilter()
         {
-            var item = Categories_ComboBox.SelectedItem as Category;
+            var cv = CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource);
+            var category = ViewModel.SelectedCategory;
 
-            if(item == null || item.Name == "Wszystkie pytania")
+            if (cv == null)
             {
-                Answers_Grid.ItemsSource = ViewModel.Questions;
+                return;
+            }
+
+            if (category == null || category.Name == "Wszystkie pytania")
+            {
+                cv.Filter = (q) => !ViewModel.TemplateQuestions.Contains(q);
             }
             else
             {
-                Answers_Grid.ItemsSource = ViewModel.Questions.Where(x => x.categoryId == item.Id);
+                cv.Filter = (q) => (q as Question).Category.Id == category.Id && !ViewModel.TemplateQuestions.Contains(q);
             }
+        }
 
+        private void Category_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { 
+            ViewModel.SelectedCategory = (Category)(sender as ComboBox).SelectedItem;
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource)?.Refresh();
         }
         private void Add_template(object sender, RoutedEventArgs e)
         {
@@ -48,22 +70,20 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             var listView = sender as System.Windows.Controls.ListView;
             var template = (TestTemplate)listView.SelectedItem;
+
             ViewModel.SelectedTemplate = template;
-            foreach(var question in ViewModel.Questions)
+            ViewModel.TemplateQuestions.Clear();
+
+            foreach(var q in template.QuestionPool)
             {
-                foreach (var q in template.QuestionPool)
-                {
-                    if (question.questionName == q.QuestionContent)
-                    {      
-                        question.isInPool = true; break;
-                    }
-                    else
-                    {
-                        question.isInPool = false;
-                    }
-                }
+                ViewModel.TemplateQuestions.Add(q);
             }
 
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource)?.Refresh();
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource)?.Refresh();
         }
 
 
@@ -121,9 +141,60 @@ namespace TestsGenerator.WPF.Views.Pages
             cb.SelectedIndex = 0;
         }
 
-        private void InPoolClicked(object sender, EventArgs e)
+
+        private void BtnAddSelected_Click(object sender, RoutedEventArgs e)
         {
-            
+            var items = lvAllQuestions.SelectedItems.Cast<Question>().ToList();
+
+            if (items.Any())
+            {
+                ViewModel.AddQuestionsToTemplateCommand.Execute(items);
+            }
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Refresh();
+        }
+
+        private void BtnAddAll_Click(object sender, RoutedEventArgs e)
+        {
+            var items = CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Cast<Question>().ToList();
+
+            ViewModel.AddQuestionsToTemplateCommand.Execute(items);
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Refresh();
+        }
+
+        private void BtnRemoveSelected_Click(object sender, RoutedEventArgs e)
+        {
+            var items = lvTemplateQuestions.SelectedItems.Cast<Question>().ToList();
+
+            if (items.Any())
+            {
+                ViewModel.RemoveQuestionsFromTemplateCommand.Execute(items);
+            }
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Refresh();
+
+        }
+
+        private void BtnRemoveAll_Click(object sender, RoutedEventArgs e)
+        {
+            var items = CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Cast<Question>().ToList();
+
+            ViewModel.RemoveQuestionsFromTemplateCommand.Execute(items);
+
+            ApplyLVAllQuestionsFilter();
+
+            CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Refresh();
+            CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Refresh();
         }
     }
 }
