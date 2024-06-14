@@ -17,5 +17,6 @@ namespace TestsGenerator.Domain.Models.Tests
 
         public Test Test { get; set; }
         public Answer Answer { get; set; }
+        public Question Question { get; set; }
     }
 }

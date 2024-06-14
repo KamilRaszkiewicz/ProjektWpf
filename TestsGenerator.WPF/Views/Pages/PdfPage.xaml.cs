@@ -97,7 +97,6 @@ namespace TestsGenerator.WPF.Views.Pages
             {
                 webView.CoreWebView2.Navigate($"data:application/pdf;base64,{Convert.ToBase64String(pdf)}");
             });
-
         }
     }
 }

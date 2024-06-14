@@ -76,8 +76,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
         public void OnNavigatedTo()
         {
-            if (!_isInitialized)
-                InitializeViewModel();
+            InitializeViewModel();
         }
 
     }

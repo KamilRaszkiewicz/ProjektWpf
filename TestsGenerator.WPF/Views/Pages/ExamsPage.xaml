@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TestsGenerator.WPF.Views.Pages"
+    xmlns:h="clr-namespace:TestsGenerator.WPF.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     Title="ExamsPage"
     d:DataContext="{d:DesignInstance local:ExamsPage,
     IsDesignTimeCreatable=False}"
@@ -15,12 +17,117 @@
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
+    <Page.Resources>
+        <h:ItemsCountToBoolConverter x:Key="ItemsCountToBoolConverter" />
+    </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+            <ColumnDefinition Width="10*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <ComboBox 
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding ViewModel.Templates}"
+                    SelectionChanged="CBTemplates_SelectionChanged"
+                    x:Name="CBTemplates"
+                    Initialized="CBTemplates_Initialized">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        <RowDefinition Height="20"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+
+                    <ui:TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Liczba arkuszy do wygenerowania" />
+                    <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0,10,0"  HorizontalAlignment="Stretch" x:Name="SliderWrapper">
+                            <Slider x:Name="slider" Minimum="0" Maximum="20" Value="{Binding ElementName=valueTextBox, Path=Text, Mode=TwoWay}"
+                            IsSnapToTickEnabled="True" TickFrequency="1" Width="{Binding Path=ActualWidth, ElementName=SliderWrapper}"/>
+                        </StackPanel>
+                        <ui:TextBlock Grid.Column="1" TextWrapping="Wrap" x:Name="valueTextBox" Text="{Binding ElementName=slider, Path=Value, StringFormat={}{0}}" />
+                    </Grid>
+                </Grid>
+
+                <ui:Button Grid.Row="2" HorizontalAlignment="Stretch" Content="Generuj" x:Name="GenerateTestsBtn" Click="GenerateTestsBtn_Click">
+                    <ui:Button.Style>
+                        <Style TargetType="{x:Type ui:Button}" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Value, ElementName=slider, UpdateSourceTrigger=PropertyChanged}" Value="0">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ui:Button.Style>
+                </ui:Button>
+
+                <ComboBox Grid.Row="4"
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding ViewModel.Tests}"
+                    SelectionChanged="CBTests_SelectionChanged"
+                    x:Name="CBTests"
+                    Initialized="CBTests_Initialized">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding VersionIdentifier}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ViewModel.Tests.Count}" Value="0">
+                                    <Setter Property="Text" Value="Brak wygenerowanych testów" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+
+                <!--<TreeView  Name="treeView" Grid.Row="6" HorizontalAlignment="Stretch">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource = "{Binding Path=TableFields}">
+                            <TextBlock Text="{Binding Path=Name}"/>
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Key}"/>
+                                </DataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>-->
+            </Grid>
+        </StackPanel>
+
+        <wv2:WebView2 x:Name="webView" Grid.Column="2" Initialized="webView_Initialized"/>
+    </Grid>
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="1*"/> 
-            <ColumnDefinition Width="5*"/> 
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <TreeView Name="treeView" Grid.Column="0" HorizontalAlignment="Stretch"
         ItemsSource="{Binding ViewModel.SelectedTest, Mode=OneWay}">
@@ -62,5 +169,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </Grid>
+    </Grid>-->
 </Page>

@@ -14,28 +14,22 @@ namespace TestsGenerator.WPF.ViewModels.Windows
             new NavigationViewItem()
             {
                 Content = "Pytania",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Question24 },
                 TargetPageType = typeof(Views.Pages.QuestionsPage)
 
             },
             new NavigationViewItem()
             {
                 Content = "Szablony",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.Save24 },
+                Icon = new SymbolIcon { Symbol = SymbolRegular.Document24 },
                 TargetPageType = typeof(Views.Pages.DataPage)
             },
             new NavigationViewItem()
             {
                 Content = "Testy",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.Fingerprint24 },
+                Icon = new SymbolIcon { Symbol = SymbolRegular.DocumentPdf24 },
                 TargetPageType = typeof(Views.Pages.ExamsPage)
             },
-            new NavigationViewItem()
-            {
-                Content = "Arkusze",
-                Icon = new SymbolIcon { Symbol = SymbolRegular.DocumentPdf24 },
-                TargetPageType = typeof(Views.Pages.PdfPage)
-            }
         };
 
         [ObservableProperty]

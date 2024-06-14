@@ -141,6 +141,20 @@ namespace TestsGenerator.Infrastructure.Database
 
             modelBuilder
                 .Entity<TestQuestionAnswerOrdinal>()
+                .HasOne(x => x.Question)
+                .WithMany()
+                .HasForeignKey(x => x.QuestionsId)
+                .HasPrincipalKey(x => x.Id);
+
+            modelBuilder
+                .Entity<TestQuestionAnswerOrdinal>()
+                .HasOne(x => x.Answer)
+                .WithMany()
+                .HasForeignKey(x => x.AnswersId)
+                .HasPrincipalKey(x => x.Id);
+
+            modelBuilder
+                .Entity<TestQuestionAnswerOrdinal>()
                 .HasKey(x => new { x.TestsId, x.QuestionsId, x.AnswersId });
 
             base.OnModelCreating(modelBuilder);
