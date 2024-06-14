@@ -43,7 +43,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>-->
 
-            <StackPanel Grid.Column="0" VerticalAlignment="Stretch">
+            <StackPanel Grid.ColumnSpan="3" VerticalAlignment="Stretch" MaxWidth="500">
                 <StackPanel Background="{DynamicResource ControlBgDefault}" HorizontalAlignment="Stretch">
                     <ui:ListView
                         x:Name="TemplateList"
@@ -67,34 +67,6 @@
                     Text="{Binding ViewModel.SelectedTemplate.Name, Mode=TwoWay}" />
                 <ui:Button Margin="0,10,0,0" Content="Nowy szablon" HorizontalAlignment="Stretch" Grid.Column="0" Click="Add_template"/>
             </StackPanel>
-
-
-
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="10"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0" HorizontalAlignment="Stretch">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="50"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <ui:TextBlock Grid.Column="0" TextWrapping="Wrap" Text="Liczba arkuszy do wygenerowania" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,10,0"  HorizontalAlignment="Stretch" x:Name="SliderWrapper">
-                        <Slider x:Name="slider" Minimum="0" Maximum="100" Value="{Binding ElementName=valueTextBox, Path=Text, Mode=TwoWay}"
-                            IsSnapToTickEnabled="True" TickFrequency="1" Width="{Binding Path=ActualWidth, ElementName=SliderWrapper}"/>
-                    </StackPanel>
-                    <ui:TextBlock Grid.Column="2" TextWrapping="Wrap" x:Name="valueTextBox" Text="{Binding ElementName=slider, Path=Value, StringFormat={}{0}}"/>
-                </Grid>
-
-                <ui:Button Grid.Row="3" HorizontalAlignment="Stretch" Content="Generuj" Click="generate_templates"/>
-            </Grid>
 
         </Grid>
         <Grid Grid.Row="1" Height="400" Margin="0,30,0,0">
@@ -207,6 +179,6 @@
                 
                 Margin="0,20,0,0"
                 HorizontalAlignment="Stretch" Content="Zapisz"
-                Command="{Binding ViewModel.SaveTemplateCommand}"/>
+                Click="Save_Button_Click"/>
     </Grid>
 </Page>

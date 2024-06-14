@@ -11,6 +11,7 @@ using TestsGenerator.App.Services;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.Domain.Models.Tests;
 using TestsGenerator.WPF.Models;
+using TestsGenerator.WPF.Views.Pages;
 using Wpf.Ui.Controls;
 
 namespace TestsGenerator.WPF.ViewModels.Pages
@@ -83,7 +84,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
             var categories = new ObservableCollection<Category>(_questionsService.GetCategories());
 
             Category all = new Category();
-            all.Name = "Wszystkie pytania";
+            all.Name = DataPage.ALL_CATGEGORIES;
             categories.Insert(0,all);
             Categories = categories;
 
@@ -98,23 +99,20 @@ namespace TestsGenerator.WPF.ViewModels.Pages
 
 
         [RelayCommand]
-        private void SaveTemplate()
+        private void SaveTemplate(List<Question> questions)
         {
-            /*
-            foreach (var question in Questions)
+            if(SelectedTemplate == null)
             {
-                if (question.isInPool)
-                {
-                    Question question1 = QuestionsNotChanged.Where(p=>p.QuestionContent==question.questionName).FirstOrDefault();
-                    _selectedTemplate.QuestionPool.Add(question1);
-                }
+                return;
             }
 
-          _templatesService.SaveTemplate(_selectedTemplate).ContinueWith(x =>
+            SelectedTemplate.QuestionPool = questions;
+
+
+            _templatesService.SaveTemplate(SelectedTemplate).ContinueWith(x =>
             {
                 Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
             });
-         */
         }
 
         [RelayCommand]
@@ -156,19 +154,14 @@ namespace TestsGenerator.WPF.ViewModels.Pages
                 Name = "Nowy Szablon",
                 Tests = new List<Test>()
             };
+
             Templates.Add(temp);
-           await _templatesService.SaveTemplate(temp).ContinueWith(x =>
+
+            await _templatesService.SaveTemplate(temp).ContinueWith(x =>
             {
                 Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
             });
-
-            
-        }
-
-        [RelayCommand]
-        private async Task AddTests(Test tests)
-        {
-            await _templatesService.SaveTest(tests);
+ 
         }
     }
 }

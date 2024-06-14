@@ -3,35 +3,79 @@ using TestsGenerator.App.Services;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.Domain.Models.Tests;
 using TestsGenerator.WPF.Views.Pages;
-using static TestsGenerator.WPF.ViewModels.Pages.DataViewModel;
+using Wpf.Ui.Controls;
 
 namespace TestsGenerator.WPF.ViewModels.Pages
 {
-    public partial class ExamsViewModel : ObservableObject
+    public partial class ExamsViewModel : ObservableObject, INavigationAware
     {
-
         private readonly TemplatesService _templatesService;
+        private bool _isInitialized = false;
 
         [ObservableProperty]
-        private Test _selectedTest;
+        private TestTemplate _selectedTemplate;
+
+        [ObservableProperty]
+        private ObservableCollection<TestTemplate> _templates;
 
         [ObservableProperty]
         private ObservableCollection<Test> _tests;
+
+        [ObservableProperty]
+        private Test _selectedTest;
 
         public ExamsViewModel(TemplatesService templatesService)
         {
             _templatesService = templatesService;
         }
-
-        public ObservableCollection<Test> GetTests()
+        public void OnNavigatedTo()
         {
-            var tests = new List<Test>(_templatesService.GetAllTests());
-            return new ObservableCollection<Test>(_templatesService.GetAllTests());
+            InitializeViewModel();
         }
+
+        public void OnNavigatedFrom() { }
 
         public void InitializeViewModel()
         {
-            Tests = new ObservableCollection<Test>(GetTests());
+            Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
+            Tests = new ObservableCollection<Test>();
+        }
+
+        [RelayCommand]
+        private void ChangeTemplate(TestTemplate template)
+        {
+            SelectedTemplate = template;
+
+            var tests = _templatesService.GetTestTemplatesTests(template);
+
+            Tests.Clear();
+            foreach (var t in tests)
+            {
+                Tests.Add(t);
+            }
+        }
+
+        [RelayCommand]
+        private void GenerateTests((TestTemplate template, int testsToGenerate) data)
+        {
+            var (template, testsToGenerate) = data;
+
+            _templatesService.GenerateTestsAsync(template, testsToGenerate)
+                .ContinueWith(x =>
+                {
+                    Tests.Clear();
+
+                    foreach (var t in template.Tests)
+                    {
+                        Tests.Add(t);
+                    }
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        [RelayCommand]
+        private void ChangeTest(Test test)
+        {
+            SelectedTest = test;
         }
     }
 }

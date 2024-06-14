@@ -15,16 +15,14 @@ namespace TestsGenerator.WPF.Views.Pages
 {
     public partial class DataPage : INavigableView<DataViewModel>
     {
+        public const string ALL_CATGEGORIES = "Wszystkie kategorie";
+
         public DataViewModel ViewModel { get; }
 
         public MainWindow MainWindowRef { get; set; }
-
-        private readonly IPdfService _pdfService;
-
-        public DataPage(DataViewModel viewModel, IPdfService pdfService)
+        public DataPage(DataViewModel viewModel)
         {
             ViewModel = viewModel;
-            _pdfService = pdfService;
 
             MainWindowRef = MainWindow.MainWindowRef;
 
@@ -43,7 +41,7 @@ namespace TestsGenerator.WPF.Views.Pages
                 return;
             }
 
-            if (category == null || category.Name == "Wszystkie pytania")
+            if (category == null || category.Name == ALL_CATGEGORIES)
             {
                 cv.Filter = (q) => !ViewModel.TemplateQuestions.Contains(q);
             }
@@ -79,7 +77,6 @@ namespace TestsGenerator.WPF.Views.Pages
                 ViewModel.TemplateQuestions.Add(q);
             }
 
-
             ApplyLVAllQuestionsFilter();
 
             CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource)?.Refresh();
@@ -89,6 +86,7 @@ namespace TestsGenerator.WPF.Views.Pages
 
         private void generate_templates (object sender, RoutedEventArgs e)
         {
+            /*
             TextInputDialog dialog = new TextInputDialog();
             int testCount = int.Parse(valueTextBox.Text);
             var template = ViewModel.SelectedTemplate;
@@ -120,7 +118,7 @@ namespace TestsGenerator.WPF.Views.Pages
             {
                 return;
             }
-
+            */
         }
 
         public static List<T> GetRandomQuestions<T>(List<T> list, int count)
@@ -195,6 +193,13 @@ namespace TestsGenerator.WPF.Views.Pages
 
             CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Refresh();
             CollectionViewSource.GetDefaultView(lvAllQuestions.ItemsSource).Refresh();
+        }
+
+        private void Save_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var items = CollectionViewSource.GetDefaultView(lvTemplateQuestions.ItemsSource).Cast<Question>().ToList();
+
+            ViewModel.SaveTemplateCommand.Execute(items);
         }
     }
 }
