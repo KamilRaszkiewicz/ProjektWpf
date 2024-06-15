@@ -28,6 +28,13 @@ namespace TestsGenerator.WPF.Views.Pages
         {
             var listView = sender as System.Windows.Controls.ListView;
             ViewModel.SelectedTest = (Test)listView.SelectedItem;
+            ViewModel.SelectedQuestion = null;
+        }
+
+        private void Question_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listView = sender as System.Windows.Controls.ListView;
+            ViewModel.SelectedQuestion = (TestQuestionOrdinal)Questions.SelectedItem;
         }
 
         private void CBTemplates_Initialized(object sender, EventArgs e)

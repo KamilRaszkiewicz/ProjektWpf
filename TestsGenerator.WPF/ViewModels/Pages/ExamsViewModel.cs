@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using TestsGenerator.App.Services;
 using TestsGenerator.Domain.Models.Questions;
 using TestsGenerator.Domain.Models.Tests;
@@ -24,6 +25,8 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         [ObservableProperty]
         private Test _selectedTest;
 
+        [ObservableProperty]
+        private TestQuestionOrdinal _selectedQuestion;
         public ExamsViewModel(TemplatesService templatesService)
         {
             _templatesService = templatesService;
@@ -32,6 +35,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         {
             InitializeViewModel();
         }
+
 
         public void OnNavigatedFrom() { }
 

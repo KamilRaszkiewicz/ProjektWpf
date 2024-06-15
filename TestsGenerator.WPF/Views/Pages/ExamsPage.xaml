@@ -50,6 +50,7 @@
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
@@ -84,7 +85,7 @@
                     </ui:Button.Style>
                 </ui:Button>
 
-                <ComboBox Grid.Row="4"
+                <ComboBox Grid.Row="4" 
                     VerticalAlignment="Top"
                     ItemsSource="{Binding ViewModel.Tests}"
                     SelectionChanged="CBTests_SelectionChanged"
@@ -105,19 +106,44 @@
                         </Style>
                     </ComboBox.Style>
                 </ComboBox>
+                <ui:ListView Grid.Row="6" x:Name="Questions"
+                    SelectionChanged="Question_SelectionChanged"
+                    ItemsSource="{Binding ViewModel.SelectedTest.QuestionsOrdinals, Mode=OneWay}">
+                    <ListView.ItemTemplate>
 
-                <!--<TreeView  Name="treeView" Grid.Row="6" HorizontalAlignment="Stretch">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource = "{Binding Path=TableFields}">
-                            <TextBlock Text="{Binding Path=Name}"/>
-                            <HierarchicalDataTemplate.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Key}"/>
-                                </DataTemplate>
-                            </HierarchicalDataTemplate.ItemTemplate>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>-->
+                        <DataTemplate>
+                            <ui:TextBlock
+                                    Height="40"
+                                    Margin="4"
+                                    Padding="4"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Appearance="Secondary"
+                                    Foreground="Black"
+                                    OverridesDefaultStyle="True"
+                                    Text="{Binding Question.QuestionContent, Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ui:ListView>
+                <ui:DataGrid
+                Grid.Row="7"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding ViewModel.SelectedQuestion.Question.QuestionAnswers, Mode=TwoWay}"
+                x:Name="Answers_Grid">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn 
+                        Header="Odpowiedź"
+                        Width="*"
+                        Binding="{Binding Answer.Content, Mode=OneWay}"
+                        ></DataGridTextColumn>
+                        <DataGridCheckBoxColumn
+                        Header="Poprawna" 
+                        Width="auto"
+                        IsReadOnly="True"
+                        Binding="{Binding IsCorrect, Mode=OneWay}">
+                        </DataGridCheckBoxColumn>
+                    </DataGrid.Columns>
+                </ui:DataGrid>
             </Grid>
         </StackPanel>
 
