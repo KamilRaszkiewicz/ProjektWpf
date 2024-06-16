@@ -33,8 +33,9 @@ namespace TestsGenerator.WPF.Views.Pages
 
         private void Question_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var listView = sender as System.Windows.Controls.ListView;
-            ViewModel.SelectedQuestion = (TestQuestionOrdinal)Questions.SelectedItem;
+            ViewModel.SelectedQuestion = (Question)Questions.SelectedItem;
+
+            ViewModel.SelectQuestionCommand.Execute((Question)Questions.SelectedItem);
         }
 
         private void CBTemplates_Initialized(object sender, EventArgs e)

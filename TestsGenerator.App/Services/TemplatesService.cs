@@ -17,14 +17,22 @@ namespace TestsGenerator.App.Services
     {
         private readonly IRepository<TestTemplate> _templatesRepository;
         private readonly IRepository<Test> _testsRepository;
-
+        private readonly IRepository<TestQuestionOrdinal> _tqoRepository;
+        private readonly IRepository<TestQuestionAnswerOrdinal> _tqaoRepository;
+        private readonly IRepository<QuestionAnswer> _qaRepository;
 
         public TemplatesService(
         IRepository<TestTemplate> templatesRepository,
-        IRepository<Test> testsRepository)
+        IRepository<Test> testsRepository,
+        IRepository<TestQuestionOrdinal> tqoRepository,
+        IRepository<TestQuestionAnswerOrdinal> tqaoRepository,
+        IRepository<QuestionAnswer> qaRepository)
         {
             _templatesRepository = templatesRepository;
             _testsRepository = testsRepository;
+            _tqoRepository = tqoRepository;
+            _tqaoRepository = tqaoRepository;
+            _qaRepository = qaRepository;
         }
 
         public List<TestTemplate> GetAllTemplates()
@@ -101,6 +109,45 @@ namespace TestsGenerator.App.Services
             }
 
             await _testsRepository.UpdateAsync(tests, CancellationToken.None);
+        }
+
+        public List<Question> GetQuestionsOdered(Test test)
+        {
+            return _tqoRepository
+                .GetQueryable()
+                .Include(x => x.Question)
+                .Where(x => x.TestsId == test.Id)
+                .OrderBy(x => x.Ordinal)
+                .Select(x => x.Question)
+                .ToList();
+        }
+
+        public List<Answer> GetQuestionAnswersOdered(Test test, Question question)
+        {
+            var answersIdsOrdered = _tqaoRepository
+                .GetQueryable()
+                .Where(x => x.TestsId == test.Id && x.QuestionsId == question.Id)
+                .OrderBy(x => x.Ordinal)
+                .Select(x => x.AnswersId)
+                .ToList();
+
+            var questionsAnswers = _qaRepository
+                .GetQueryable()
+                .Include(x => x.Answer)
+                .Where(x => x.QuestionsId == question.Id);
+
+            return questionsAnswers.Join(
+                answersIdsOrdered,
+                x => x.AnswersId,
+                x => x,
+                (x, y) => new
+                {
+                    Answer = x.Answer,
+                    Ordinal = y
+                })
+                .OrderBy(x => x.Ordinal)
+                .Select(x => x.Answer)
+                .ToList();
         }
 
         private string IntToVersionIdentifier(int value)

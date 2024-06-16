@@ -16,6 +16,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         [ObservableProperty]
         private TestTemplate _selectedTemplate;
 
+
         [ObservableProperty]
         private ObservableCollection<TestTemplate> _templates;
 
@@ -26,7 +27,13 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private Test _selectedTest;
 
         [ObservableProperty]
-        private TestQuestionOrdinal _selectedQuestion;
+        private ObservableCollection<Question> _selectedTestsQuestionsOrdered;
+
+        [ObservableProperty]
+        private ObservableCollection<Answer> _selectedTestsQuestionsAnswersOrdered;
+
+        [ObservableProperty]
+        private Question _selectedQuestion;
         public ExamsViewModel(TemplatesService templatesService)
         {
             _templatesService = templatesService;
@@ -43,6 +50,8 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         {
             Templates = new ObservableCollection<TestTemplate>(_templatesService.GetAllTemplates());
             Tests = new ObservableCollection<Test>();
+            SelectedTestsQuestionsOrdered = new ObservableCollection<Question>();
+            SelectedTestsQuestionsAnswersOrdered = new ObservableCollection<Answer>();
         }
 
         [RelayCommand]
@@ -80,6 +89,33 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private void ChangeTest(Test test)
         {
             SelectedTest = test;
+            SelectedTestsQuestionsOrdered.Clear();
+
+            if (test == null)
+                return;
+
+            var questions = _templatesService.GetQuestionsOdered(test);
+
+            foreach(var q in questions)
+            {
+                SelectedTestsQuestionsOrdered.Add(q);
+            }
+        }
+
+        [RelayCommand]
+        private void SelectQuestion(Question question)
+        {
+            if (question == null)
+                return;
+
+            SelectedTestsQuestionsAnswersOrdered.Clear();
+
+            var answers = _templatesService.GetQuestionAnswersOdered(SelectedTest, question);
+
+            foreach (var a in answers)
+            {
+                SelectedTestsQuestionsAnswersOrdered.Add(a);
+            }
         }
     }
 }
