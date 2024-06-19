@@ -24,7 +24,7 @@ namespace TestsGenerator.WPF.ViewModels.Pages
         private void InitializeViewModel()
         {
             CurrentTheme = ApplicationThemeManager.GetAppTheme();
-            AppVersion = $"UiDesktopApp1 - {GetAssemblyVersion()}";
+            AppVersion = $"TestsGenerator - {GetAssemblyVersion()}";
 
             _isInitialized = true;
         }
